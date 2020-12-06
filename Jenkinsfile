@@ -1,95 +1,34 @@
-pipeline {
-    agent any
-    
-    //tools {
-        //jdk "JDK"
-      //maven "M2_HOME"
-   //}
+node {
+    def app
 
-    stages {
-        
-        stage('checkout'){
-              steps {
-         git 'https://github.com/HarshithaC30/ITransform-JenkinsCiCd.git'      
-        }
-              }
-      stage('Build Project') {
-         steps {
-            // Get some code from a GitHub repository 
-            //git 'https://github.com/HarshithaC30/ITransform-JenkinsCiCd.git'
-            sh "mvn clean compile"
-         }
-         }
-      //stage("Test") {
-      //    steps {
-       //     //git 'https://github.com/HarshithaC30/ITransform-JenkinsCiCd.git'  
-       //     bat "mvn clean test"
-            
-       //   }
+    stage('Clone repository') {
+        /* Cloning the Repository to our Workspace */
 
-      //}
-      stage("Deploy") {
-          steps {
-            git 'https://github.com/HarshithaC30/ITransform-JenkinsCiCd.git'  
-            sh "mvn clean install"
-            
-          }
-        }  
-        
-       //   stage("build & SonarQube analysis") {
-         //   steps {
-          //    withSonarQubeEnv('sonarQube') {
-           //     sh "mvn clean package sonar:sonar"
-           //   }
-           // }
-         // }
-        
-       // stage("Quality Gate") {
-        //    steps {
-         //     timeout(time: 1, unit: 'HOURS') {
-          //      waitForQualityGate abortPipeline: true
-          //    }
-          //  }
-         // }
-        
-        stage('Docker Build') {
-      agent any
-      steps {
-        sh 'docker build -t vishnu95/test:latest . '
-      }
+        checkout scm
     }
-    stage('Docker Push') {
-      agent any
-      steps {
-        withCredentials([usernamePassword(credentialsId: 'Dockerhub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
-          sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
-          sh 'docker push abc11/test:latest'
+
+    stage('Build image') {
+        /* This builds the actual image */
+
+        app = docker.build("abc11/app")
+    }
+
+    stage('Test image') {
+        
+        app.inside {
+            echo "Tests passed"
         }
-      }
-   // }
-        
-        
-    //stage("Deploy to kubernetes"){
-        //steps{
-           // kubernetesDeploy(kubeconfigId: 'kube',            
+    }
 
-                 configs: '*.yaml')
-    
-//    bat "kubectl create -f pods.yaml"
-  //  bat "kubectl create -f service.yaml"
-   	//}
-    //}
-          
-          }
-          post {
-              success {
-                  step([$class: 'JUnitResultArchiver', testResults: 'target/surefire-reports/TEST-*.xml'])
-                  archiveArtifacts 'target/*.jar'
-              }
-
-          }
-
-
-      }
-
+    stage('Push image') {
+        /* 
+			You would need to first register with DockerHub before you can push images to your account
+		*/
+        docker.withRegistry('https://registry.hub.docker.com', 'docker-hub') {
+            app.push("${env.BUILD_NUMBER}")
+            app.push("latest")
+            } 
+                echo "Trying to Push Docker Build to DockerHub"
+    }
+}
 
