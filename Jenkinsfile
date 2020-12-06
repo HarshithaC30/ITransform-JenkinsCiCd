@@ -9,22 +9,22 @@ pipeline {
         		}
               	}
 		
-		stage('Docker Build') {
-  		    agent any
-   		   steps {
-     			   sh 'docker build -t hc0211/test:latest . '
-     			 }
-   	 	}
+		//stage('Docker Build') {
+  		    //agent any
+   		   //steps {
+     			   //sh 'docker build -t hc0211/test:latest . '
+     			 //}
+   	 	//}
 		
-		stage('Docker Push') {
-      			agent any
-      			steps {
-        			withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
-         			sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
-          			sh 'docker push hc0211/test:latest'
-        			}
-      			}
-		}
+		//stage('Docker Push') {
+      			//agent any
+      			//steps {
+        			//withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
+         			//sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
+          			//sh 'docker push hc0211/test:latest'
+        			//}
+      			//}
+		//}
 		
 		stage("Deploy to kubernetes"){
         		steps{
