@@ -9,18 +9,19 @@ pipeline {
         		}
               	}
 		
-		stage('Build Project') {
+		stage('Build image') {
          		steps {
-            			// Get some code from a GitHub repository 
-            			//git 'https://github.com/HarshithaC30/ITransform-JenkinsCiCd.git'
-            			sh "mvn clean compile"
+            			app = docker.build("abc11/app")
          		}
          	}
 		
-		stage("Deploy") {
+		stage("Push image") {
          		 steps {
-            			git 'https://github.com/HarshithaC30/ITransform-JenkinsCiCd.git'  
-            			sh "mvn clean install"
+            			docker.withRegistry('https://registry.hub.docker.com', 'docker-hub') {
+            			app.push("${env.BUILD_NUMBER}")
+            			app.push("latest")
+            			} 
+                		echo "Trying to Push Docker Build to DockerHub"
             		 }
        		}
 		
