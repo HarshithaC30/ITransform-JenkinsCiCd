@@ -1,34 +1,29 @@
-node {
-    def app
-
-    stage('Clone repository') {
-        /* Cloning the Repository to our Workspace */
-
-        checkout scm
-    }
-
-    stage('Build image') {
-        /* This builds the actual image */
-
-        app = docker.build("abc11/app")
-    }
-
-    stage('Test image') {
-        
-        app.inside {
-            echo "Tests passed"
-        }
-    }
-
-    stage('Push image') {
-        /* 
-			You would need to first register with DockerHub before you can push images to your account
-		*/
-        docker.withRegistry('https://registry.hub.docker.com', 'docker-hub') {
-            app.push("${env.BUILD_NUMBER}")
-            app.push("latest")
-            } 
-                echo "Trying to Push Docker Build to DockerHub"
-    }
+pipeline {
+    agent any
+	
+	stages {
+		
+        	stage('checkout'){
+              		steps {
+         			git 'https://github.com/HarshithaC30/ITransform-JenkinsCiCd.git'      
+        		}
+              	}
+		
+		stage('Build Project') {
+         		steps {
+            			// Get some code from a GitHub repository 
+            			//git 'https://github.com/HarshithaC30/ITransform-JenkinsCiCd.git'
+            			sh "mvn clean compile"
+         		}
+         	}
+		
+		stage("Deploy") {
+         		 steps {
+            			git 'https://github.com/HarshithaC30/ITransform-JenkinsCiCd.git'  
+            			sh "mvn clean install"
+            		 }
+       		}
+		
+	}
+	
 }
-
