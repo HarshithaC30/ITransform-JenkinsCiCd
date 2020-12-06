@@ -9,11 +9,12 @@ pipeline {
         		}
               	}
 		
-		stage('Build image') {
-         		steps {
-            			app = docker.build("abc11/app")
-         		}
-         	}
+		stage('Docker Build') {
+  		    agent any
+   		   steps {
+     			   sh 'docker build -t abc11/test:latest . '
+     			 }
+   	 	}
 		
 		stage("Push image") {
          		 steps {
