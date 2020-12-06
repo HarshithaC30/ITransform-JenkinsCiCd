@@ -28,9 +28,9 @@ pipeline {
 		
 		stage("Deploy to kubernetes"){
         		steps{
-            			kubernetesDeploy(kubeconfigId: 'kube',            
+            			//kubernetesDeploy(kubeconfigId: 'kube',            
 
-                 		configs: '*.yaml')
+                 		//configs: '*.yaml')
     
 		    		sh "kubectl create -f pods.yaml"
   			  	sh "kubectl create -f service.yaml"
