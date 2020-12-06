@@ -1,28 +1,28 @@
 pipeline {
     agent any
     
-    tools {
+    //tools {
         //jdk "JDK"
-      maven "M2_HOME"
-   }
+      //maven "M2_HOME"
+   //}
 
     stages {
         
         stage('checkout'){
               steps {
-         git 'https://github.com/vishnuishpujani/JenkinsSample.git'      
+         git 'https://github.com/HarshithaC30/ITransform-JenkinsCiCd.git'      
         }
               }
       stage('Build Project') {
          steps {
             // Get some code from a GitHub repository 
-            //git 'https://github.com/vishnuishpujani/JenkinsSample.git'
+            //git 'https://github.com/HarshithaC30/ITransform-JenkinsCiCd.git'
             sh "mvn clean compile"
          }
          }
       //stage("Test") {
       //    steps {
-       //     //git 'https://github.com/vishnuishpujani/JenkinsSample.git'  
+       //     //git 'https://github.com/HarshithaC30/ITransform-JenkinsCiCd.git'  
        //     bat "mvn clean test"
             
        //   }
@@ -30,7 +30,7 @@ pipeline {
       //}
       stage("Deploy") {
           steps {
-            git 'https://github.com/vishnuishpujani/JenkinsSample.git'  
+            git 'https://github.com/HarshithaC30/ITransform-JenkinsCiCd.git'  
             sh "mvn clean install"
             
           }
@@ -52,33 +52,33 @@ pipeline {
           //  }
          // }
         
-        //stage('Docker Build') {
-      //agent any
-      //steps {
-        //sh 'docker build -t vishnu95/test:latest . '
-     // }
-   // }
-    //stage('Docker Push') {
-     // agent any
-     // steps {
-      //  withCredentials([usernamePassword(credentialsId: 'Dockerhub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
-       //   sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
-       //   sh 'docker push vishnu95/test:latest'
-        //}
-     // }
+        stage('Docker Build') {
+      agent any
+      steps {
+        sh 'docker build -t vishnu95/test:latest . '
+      }
+    }
+    stage('Docker Push') {
+      agent any
+      steps {
+        withCredentials([usernamePassword(credentialsId: 'Dockerhub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
+          sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
+          sh 'docker push abc11/test:latest'
+        }
+      }
    // }
         
         
-    stage("Deploy to kubernetes"){
-        steps{
-            kubernetesDeploy(kubeconfigId: 'kube',            
+    //stage("Deploy to kubernetes"){
+        //steps{
+           // kubernetesDeploy(kubeconfigId: 'kube',            
 
                  configs: '*.yaml')
     
 //    bat "kubectl create -f pods.yaml"
   //  bat "kubectl create -f service.yaml"
-   	}
-    }
+   	//}
+    //}
           
           }
           post {
