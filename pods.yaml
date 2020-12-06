@@ -17,6 +17,6 @@ spec:
       terminationGracePeriodSeconds: 1
       containers:
       - name: java-app
-        image: vishnu95/test:latest
+        image: hc0211/test:latest
         ports:
         - containerPort: 8080
