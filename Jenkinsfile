@@ -12,7 +12,7 @@ pipeline {
 		stage('Docker Build') {
   		    agent any
    		   steps {
-     			   sh 'docker build -t abc11/test:latest . '
+     			   sh 'docker build -t hc0211/test:latest . '
      			 }
    	 	}
 		
@@ -21,7 +21,7 @@ pipeline {
       			steps {
         			withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
          			sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
-          			sh 'docker push abc11/test:latest'
+          			sh 'docker push hc0211/test:latest'
         			}
       			}
 		}
