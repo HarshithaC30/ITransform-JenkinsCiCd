@@ -9,35 +9,52 @@ pipeline {
         		}
               	}
 		
-		//stage('Docker Build') {
-  		    //agent any
-   		   //steps {
-     			   //sh 'docker build -t hc0211/test:latest . '
-     			 //}
-   	 	//}
+		//stage('Compile') {
+         		//steps {
+            			// Get some code from a GitHub repository 
+            			//git 'https://github.com/HarshithaC30/ITransform-JenkinsCiCd.git'
+            			//sh "mvn clean compile"
+         		//}
+         	//}
 		
-		//stage('Docker Push') {
-      			//agent any
-      			//steps {
-        			//withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
-         			//sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
-          			//sh 'docker push hc0211/test:latest'
-        			//}
-      			//}
-		//}
+		//stage("Mvn install") {
+         		 //steps {
+            			//git 'https://github.com/HarshithaC30/ITransform-JenkinsCiCd.git'  
+            			//sh "mvn clean install"
+            		 //}
+       		//}
 		
-		stage("Deploy to kubernetes"){
-        		steps{
+		stage('Docker Build') {
+   			agent any
+      			steps {
+       				sh 'docker build -t app1/test:latest . '
+      			}
+    		}
+		
+    		stage('Docker Push') {
+     			agent any
+     			steps {
+      				withCredentials([usernamePassword(credentialsId: 'Dockerhub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
+       				sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
+       				sh 'docker push app1/test:latest'
+        			}
+     			}
+   		}
+		
+		//stage("Deploy to kubernetes"){
+        		//steps{
             			//kubernetesDeploy(kubeconfigId: 'kube',            
 
-                 		//configs: '*.yaml')
+                		//configs: '*.yaml')
     
-		    		sh "kubectl create -f pods.yaml"
-  			  	sh "kubectl create -f service.yaml"
-				sh "kubectl apply -f pods.yaml"
-  			  	sh "kubectl apply -f service.yaml"
-   			}
-    		}
+	    			//sh "kubectl create -f pods.yaml"
+ 				//sh "kubectl create -f service.yaml"
+				
+				//sh "kubectl apply -f pods.yaml"
+				//sh "kubectl apply -f service.yaml"
+				
+   			//}
+    		//}
 		
 	}
 	
