@@ -24,12 +24,12 @@ pipeline {
             		 //}
        		//}
 		
-		stage('Docker Build') {
-   			agent any
-      			steps {
-       				sh 'docker build . -t app1/test:latest'
-      			}
-    		}
+		//stage('Docker Build') {
+   			//agent any
+      			//steps {
+       				//sh 'docker build -t app1/test:latest . '
+      			//}
+    		//}
 		
     		stage('Docker Push') {
      			agent any
