@@ -9,7 +9,7 @@ pipeline {
         		}
               	}
 		
-		stage('Build Project') {
+		stage('Compile') {
          		steps {
             			// Get some code from a GitHub repository 
             			//git 'https://github.com/HarshithaC30/ITransform-JenkinsCiCd.git'
@@ -17,7 +17,7 @@ pipeline {
          		}
          	}
 		
-		stage("Deploy") {
+		stage("Mvn install") {
          		 steps {
             			git 'https://github.com/HarshithaC30/ITransform-JenkinsCiCd.git'  
             			sh "mvn clean install"
@@ -50,8 +50,8 @@ pipeline {
 	    			sh "kubectl create -f pods.yaml"
  				sh "kubectl create -f service.yaml"
 				
-				//sh "kubectl apply -f pods.yaml"
-				//sh "kubectl apply -f service.yaml"
+				sh "kubectl apply -f pods.yaml"
+				sh "kubectl apply -f service.yaml"
 				
    			}
     		}
