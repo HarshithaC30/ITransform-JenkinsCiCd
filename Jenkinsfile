@@ -24,17 +24,34 @@ pipeline {
             		 }
        		}
 		
+		stage('Docker Build') {
+   			agent any
+      			steps {
+       				sh 'docker build -t app1/test:latest . '
+      			}
+    		}
+		
+    		stage('Docker Push') {
+     			agent any
+     			steps {
+      				withCredentials([usernamePassword(credentialsId: 'Dockerhub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
+       				sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
+       				sh 'docker push app1/test:latest'
+        			}
+     			}
+   		}
+		
 		stage("Deploy to kubernetes"){
         		steps{
-            			//kubernetesDeploy(kubeconfigId: 'kube',            
+            			kubernetesDeploy(kubeconfigId: 'kube',            
 
-                		//configs: '*.yaml')
+                		configs: '*.yaml')
     
-	    			sh "kubectl create -f pods.yaml"
- 				sh "kubectl create -f service.yaml"
+	    			//sh "kubectl create -f pods.yaml"
+ 				//sh "kubectl create -f service.yaml"
 				
-				sh "kubectl apply -f pods.yaml"
-				sh "kubectl apply -f service.yaml"
+				//sh "kubectl apply -f pods.yaml"
+				//sh "kubectl apply -f service.yaml"
 				
    			}
     		}
