@@ -46,24 +46,24 @@ pipeline {
         			sh "docker login -u $USER -p $PASSWORD"
 					
            			sh 'docker push hc0211/test:latest'
-        }
-    }
-}
+        			}
+    			}
+		}
 		
-		//stage("Deploy to kubernetes"){
-        		//steps{
-            			//kubernetesDeploy(kubeconfigId: 'kube',            
+		stage("Deploy to kubernetes"){
+        		steps{
+            			kubernetesDeploy(kubeconfigId: 'kube',            
 
-                		//configs: '*.yaml')
+                		configs: '*.yaml')
     
-	    			//sh "kubectl create -f pods.yaml"
- 				//sh "kubectl create -f service.yaml"
+	    			sh "kubectl create -f pods.yaml"
+ 				sh "kubectl create -f service.yaml"
 				
-				//sh "kubectl apply -f pods.yaml"
-				//sh "kubectl apply -f service.yaml"
+				sh "kubectl apply -f pods.yaml"
+				sh "kubectl apply -f service.yaml"
 				
-   			//}
-    		//}
+   			}
+    		}
 		
 	}
 	
