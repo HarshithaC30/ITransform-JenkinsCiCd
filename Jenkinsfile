@@ -27,7 +27,7 @@ pipeline {
 		stage('Docker Build') {
    			agent any
       			steps {
-       				sh 'docker build -t app1/test:latest . '
+       				sh 'docker build . -t app1/test:latest'
       			}
     		}
 		
@@ -36,7 +36,7 @@ pipeline {
      			steps {
       				withCredentials([usernamePassword(credentialsId: 'Dockerhub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
        				sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
-       				sh 'docker push app1/test:latest . '
+       				sh 'docker push app1/test:latest'
         			}
      			}
    		}
