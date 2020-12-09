@@ -39,13 +39,13 @@ pipeline {
         			//}
      			//}
    		//}
-		stage('Push image') {
-    withCredentials([usernamePassword( credentialsId: 'Dockerhub', usernameVariable: 'USER', passwordVariable: 'PASSWORD')]) {
-        def registry_url = "registry.hub.docker.com/"
-        sh "docker login -u $USER -p $PASSWORD ${registry_url}"
-        docker.withRegistry("http://${registry_url}", "Dockerhub") {
-            // Push your image now
-            sh 'docker push app1/test:latest'
+		stage('Docker Push') {
+     			steps {
+    				withCredentials([usernamePassword( credentialsId: 'Dockerhub', usernameVariable: 'USER', passwordVariable: 'PASSWORD')]) {
+        			def registry_url = "registry.hub.docker.com/"
+        			sh "docker login -u $USER -p $PASSWORD ${registry_url}"
+					
+           			sh 'docker push app1/test:latest'
         }
     }
 }
