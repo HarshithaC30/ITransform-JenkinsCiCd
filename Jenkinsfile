@@ -27,7 +27,7 @@ pipeline {
 		stage('Docker Build') {
    			agent any
       			steps {
-       				sh 'docker build . -t app1/test:latest'
+       				sh 'docker build . -t hc0211/test:latest'
       			}
     		}
 		
@@ -45,7 +45,7 @@ pipeline {
         
         			sh "docker login -u $USER -p $PASSWORD"
 					
-           			sh 'docker push app1/test:latest'
+           			sh 'docker push hc0211/test:latest'
         }
     }
 }
