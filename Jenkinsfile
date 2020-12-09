@@ -47,11 +47,11 @@ pipeline {
 
                 		configs: '*.yaml')
     
-	    			sh "kubectl create -f pods.yaml"
- 				sh "kubectl create -f service.yaml"
+	    			//sh "kubectl create -f pods.yaml"
+ 				//sh "kubectl create -f service.yaml"
 				
-				sh "kubectl apply -f pods.yaml"
-				sh "kubectl apply -f service.yaml"
+				//sh "kubectl apply -f pods.yaml"
+				//sh "kubectl apply -f service.yaml"
 				
    			}
     		}
