@@ -42,8 +42,8 @@ pipeline {
 		stage('Docker Push') {
      			steps {
     				withCredentials([usernamePassword( credentialsId: 'Dockerhub', usernameVariable: 'USER', passwordVariable: 'PASSWORD')]) {
-        			def registry_url = "registry.hub.docker.com/"
-        			sh "docker login -u $USER -p $PASSWORD ${registry_url}"
+        
+        			sh "docker login -u $USER -p $PASSWORD"
 					
            			sh 'docker push app1/test:latest'
         }
